@@ -1,0 +1,58 @@
+<HTML>
+<HEAD>
+	<TITLE>Number to Text</TITLE>
+</HEAD>
+<body BGCOLOR="#ffffff" TEXT="#000000" LINK="#000000" ALINK="#000000" VLINK="#000000">
+
+<script>
+function ZeroToNineteen (IntToConvert) {
+	var FirstTwoDecadeStrings = ["", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"];
+	return FirstTwoDecadeStrings[IntToConvert];
+}
+
+function Decades (IntToConvert) {
+	var DecadeStrings = ["", "ten", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"];
+	var x = Math.floor(IntToConvert / 10);
+	return DecadeStrings[x];
+}
+
+function Millennium (IntToConvert) {
+	var ReturnString = "";
+	if (IntToConvert < 20) {
+		ReturnString = ZeroToNineteen(IntToConvert);
+	} else if (IntToConvert < 100) {
+		ReturnString = Decades(IntToConvert);
+		ReturnString = ReturnString + ' ';
+		ReturnString = ReturnString + ZeroToNineteen(IntToConvert % 10);
+	} else if (IntToConvert < 1000) {
+		ReturnString = ZeroToNineteen(Math.floor(IntToConvert / 100));
+		ReturnString = ReturnString + ' hundred and ';
+		ReturnString = ReturnString + Decades(IntToConvert % 100);
+		ReturnString = ReturnString + ' ';
+		ReturnString = ReturnString + ZeroToNineteen(IntToConvert % 10);
+	}
+	return ReturnString;
+}
+
+function Convert() { 
+	var MillenniumStrings = ["", "thousand", "million", "trillion", "quadrillion", "quintrillion", "sextillion", "septillion", "octillion", "nonillion", "decillion"];
+	var InputControl = document.getElementById("InputControl_id");
+	var OutputControl = document.getElementById("OutputControl_id");
+	var OutputString = '';
+	var InputNumber = parseInt(InputControl.value);
+	var NumberOfMillennium = 1;
+	while (       Math.floor(InputNumber / (Math.pow(10, (NumberOfMillennium + 1) * 3)  ) )  > 0          ) {
+		NumberOfMillennium++;
+	}
+	for (i = NumberOfMillennium; i >= 0 ; i--) {
+		OutputString = OutputString + Millennium(Math.floor(InputNumber /  (Math.pow(10, i * 3))));
+		OutputString = OutputString + " " + MillenniumStrings[i] + " ";
+		InputNumber = (InputNumber % Math.pow(10, i * 3));
+	}
+	OutputControl.value = OutputString;
+}
+</script>
+		<input type='text' name='InputControl' id='InputControl_id' value='1234'><br />
+		<input type='button' name='ConvertBT' value='convert' onclick="Convert()"><br />
+		<input type='text' name='OutputControlEC' id='OutputControl_id' style='width:800px;'>
+</body>
